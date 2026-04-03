@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Prep Coach</title>
+  <style>
+    :root {
+      --bg: #f4f1e8;
+      --card: #fffaf0;
+      --ink: #1d2a38;
+      --muted: #51606f;
+      --accent: #c95f2d;
+      --accent-2: #1f7a6d;
+      --line: #e8dcc7;
+      --ok: #245d42;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 15%, #ffd6a5 0%, #ffd6a500 32%),
+        radial-gradient(circle at 85% 20%, #b8f2e6 0%, #b8f2e600 30%),
+        linear-gradient(145deg, #f8f6ef 0%, #efe5d4 100%);
+      display: grid;
+      place-items: start center;
+      padding: 30px 16px;
+    }
+
+    .app {
+      width: min(960px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px #1d2a3816;
+      animation: rise 450ms ease-out;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      padding: 28px;
+      background:
+        linear-gradient(120deg, #1d2a38 0%, #2f3f52 100%);
+      color: #fff;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: 0.2px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #deebff;
+      font-size: 0.95rem;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    input,
+    button {
+      font: inherit;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+    }
+
+    input {
+      width: 100%;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 3px #1f7a6d24;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      color: #fff;
+      background: linear-gradient(120deg, var(--accent), #d9783a);
+      font-weight: 600;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px #c95f2d35;
+    }
+
+    .content {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .qa {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 14px;
+      animation: fade 380ms ease both;
+    }
+
+    .qa:nth-child(odd) {
+      animation-delay: 40ms;
+    }
+
+    .qa:nth-child(even) {
+      animation-delay: 90ms;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .q {
+      margin: 0 0 8px;
+      font-weight: 700;
+      color: #152230;
+    }
+
+    .a {
+      margin: 0;
+      padding-left: 20px;
+      color: #233447;
+    }
+
+    .a li {
+      margin: 4px 0;
+      line-height: 1.35;
+    }
+
+    .qa-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .secondary {
+      background: #fff;
+      color: var(--accent-2);
+      border: 1px solid #c9e6df;
+      box-shadow: none;
+    }
+
+    .followup {
+      margin-top: 8px;
+      border-left: 4px solid var(--accent-2);
+      background: #f2fbf9;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: #1f4d46;
+      font-size: 0.92rem;
+    }
+
+    .footer {
+      padding: 14px 20px 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      color: #2b3e54;
+      border: 1px solid var(--line);
+      font-size: 0.85rem;
+    }
+
+    .status {
+      margin: 0;
+      color: var(--ok);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 760px) {
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <h1>Interview Preparation Coach</h1>
+      <p>Enter a job title to get 5 realistic interview questions and model answers.</p>
+    </header>
+
+    <section class="controls">
+      <input id="jobTitle" type="text" placeholder="Example: Data Engineer" />
+      <button id="generateBtn">Generate 5 Q&A</button>
+    </section>
+
+    <section class="content">
+      <p class="note">The coach includes a mix of technical and behavioral questions with concise structured answers.</p>
+      <p id="status" class="status"></p>
+      <div id="qaList"></div>
+    </section>
+
+    <section class="footer">
+      <button id="moreBtn" class="secondary" type="button">More Questions</button>
+      <span class="pill">Multi-turn coaching enabled</span>
+      <span class="pill">Structured STAR guidance</span>
+    </section>
+  </main>
+
+  <script>
+    const roleTemplates = {
+      data: [
+        {
+          question: "What is ETL and why is it important in data engineering?",
+          answer: [
+            "ETL stands for Extract, Transform, Load.",
+            "It moves data from source systems into analytics platforms.",
+            "It ensures data is cleaned and standardized for reliable reporting.",
+          ],
+        },
+        {
+          question: "How do you optimize a slow data pipeline?",
+          answer: [
+            "Profile each stage to find the bottleneck first.",
+            "Optimize transformations, partitioning, and query patterns.",
+            "Add monitoring metrics to validate throughput and latency gains.",
+          ],
+        },
+        {
+          question: "How do you ensure data quality in production pipelines?",
+          answer: [
+            "Define validation checks for schema, nulls, and duplicates.",
+            "Set automated alerts for failed quality rules.",
+            "Track data freshness and lineage for root-cause analysis.",
+          ],
+        },
+        {
+          question: "Tell me about a challenging data migration project.",
+          answer: [
+            "Situation: Legacy data sources caused inconsistent records.",
+            "Task: Deliver migration with minimal downtime and no data loss.",
+            "Action: Built validation scripts, staged loads, and rollback plans.",
+            "Result: Migrated successfully with 99.9% data accuracy.",
+          ],
+        },
+        {
+          question: "How do you collaborate with analysts and stakeholders?",
+          answer: [
+            "Translate business goals into measurable data requirements.",
+            "Agree on metric definitions before building pipelines.",
+            "Provide clear updates and iterate based on feedback.",
+          ],
+        },
+      ],
+      backend: [
+        {
+          question: "How do you design a scalable REST API?",
+          answer: [
+            "Design resource-based endpoints with idempotent operations.",
+            "Use caching, pagination, and database indexing.",
+            "Protect services with rate limits and observability.",
+          ],
+        },
+        {
+          question: "How do you debug production latency issues?",
+          answer: [
+            "Reproduce and isolate the issue using logs and traces.",
+            "Identify hotspots in API handlers and database queries.",
+            "Release measured fixes and verify p95/p99 latency improvements.",
+          ],
+        },
+        {
+          question: "How do you secure backend systems?",
+          answer: [
+            "Apply least-privilege access controls and authentication.",
+            "Validate all external inputs and sanitize outputs.",
+            "Use encryption, secret management, and dependency scanning.",
+          ],
+        },
+        {
+          question: "Tell me about a time you handled a critical outage.",
+          answer: [
+            "Situation: Traffic spike caused timeout errors on core endpoints.",
+            "Task: Restore stability before customer impact increased.",
+            "Action: Executed rollback, tuned queries, and added temporary caching.",
+            "Result: Service recovered in 18 minutes and incidents dropped later.",
+          ],
+        },
+        {
+          question: "How do you write maintainable backend code?",
+          answer: [
+            "Separate business logic from infrastructure concerns.",
+            "Use clear module boundaries and contract tests.",
+            "Prioritize readability and profile before optimization.",
+          ],
+        },
+      ],
+      frontend: [
+        {
+          question: "How do you improve frontend performance in large apps?",
+          answer: [
+            "Measure bundle size and runtime rendering costs first.",
+            "Use code splitting, lazy loading, and memoization.",
+            "Monitor Core Web Vitals after each release.",
+          ],
+        },
+        {
+          question: "How do you ensure accessibility in your UI work?",
+          answer: [
+            "Start with semantic HTML and keyboard support.",
+            "Check contrast, focus order, and ARIA where needed.",
+            "Validate with automated and manual screen-reader testing.",
+          ],
+        },
+        {
+          question: "How do you manage complex state in web applications?",
+          answer: [
+            "Keep local state close to components.",
+            "Use shared state only for cross-feature concerns.",
+            "Handle server state with caching and invalidation strategies.",
+          ],
+        },
+        {
+          question: "Tell me about a difficult cross-team UI delivery.",
+          answer: [
+            "Situation: Design and API changes kept shifting during a release.",
+            "Task: Ship on time without sacrificing UX quality.",
+            "Action: Created shared acceptance criteria and delivered in milestones.",
+            "Result: Released on schedule with fewer regressions.",
+          ],
+        },
+        {
+          question: "How do you reduce UI regressions in fast release cycles?",
+          answer: [
+            "Use component-level tests for critical interactions.",
+            "Add visual checks for high-impact screens.",
+            "Run staged rollouts and monitor user-impact metrics.",
+          ],
+        },
+      ],
+      devops: [
+        {
+          question: "How do you design a reliable CI/CD pipeline?",
+          answer: [
+            "Use quality gates: lint, test, security scan, then deploy.",
+            "Version artifacts and keep deployments reproducible.",
+            "Include rollback paths and progressive rollout steps.",
+          ],
+        },
+        {
+          question: "How do you improve observability in distributed systems?",
+          answer: [
+            "Correlate logs, metrics, and traces with request IDs.",
+            "Define service-level indicators tied to user impact.",
+            "Use alerting thresholds that reduce noise and false positives.",
+          ],
+        },
+        {
+          question: "How do you optimize cloud cost without harming reliability?",
+          answer: [
+            "Right-size compute and storage based on usage patterns.",
+            "Use autoscaling and lifecycle policies.",
+            "Track cost and reliability together using SLO metrics.",
+          ],
+        },
+        {
+          question: "Tell me about an incident you led in production.",
+          answer: [
+            "Situation: A deployment introduced elevated error rates.",
+            "Task: Restore service rapidly and coordinate communication.",
+            "Action: Rolled back safely, led triage, and documented root cause.",
+            "Result: Service stabilized in under 20 minutes with improved safeguards.",
+          ],
+        },
+        {
+          question: "How do you manage infrastructure as code at scale?",
+          answer: [
+            "Use reusable modules and strict code reviews.",
+            "Enforce policy checks in CI before apply.",
+            "Maintain clear environment promotion workflows.",
+          ],
+        },
+      ],
+      general: [
+        {
+          question: "Tell me about yourself and your recent experience.",
+          answer: [
+            "Summarize your role and strongest skills.",
+            "Highlight one or two measurable achievements.",
+            "Connect your background to this target role.",
+          ],
+        },
+        {
+          question: "How do you prioritize work under tight deadlines?",
+          answer: [
+            "Prioritize by business impact and dependencies.",
+            "Break work into milestones with clear owners.",
+            "Communicate trade-offs early and frequently.",
+          ],
+        },
+        {
+          question: "How do you handle feedback and disagreements?",
+          answer: [
+            "Listen first and clarify the real concern.",
+            "Focus discussion on goals and evidence.",
+            "Align on a practical action plan.",
+          ],
+        },
+        {
+          question: "Tell me about a challenging project you delivered.",
+          answer: [
+            "Situation: Project scope expanded close to deadline.",
+            "Task: Deliver a stable release without major delays.",
+            "Action: Re-prioritized scope and coordinated daily blocker removal.",
+            "Result: Released on time with strong quality metrics.",
+          ],
+        },
+        {
+          question: "Why do you want this role?",
+          answer: [
+            "Align your strengths with the role requirements.",
+            "Show motivation for the team and mission.",
+            "Explain how you can add value quickly.",
+          ],
+        },
+      ],
+    };
+
+    const extraTemplates = {
+      data: [
+        {
+          question: "How do you choose between batch and streaming pipelines?",
+          answer: [
+            "Match the design to latency and cost requirements.",
+            "Use streaming for near-real-time decisions.",
+            "Use batch where periodic processing is enough.",
+          ],
+        },
+        {
+          question: "How do you design data models for analytics?",
+          answer: [
+            "Define business entities and metrics first.",
+            "Use consistent naming and data contracts.",
+            "Balance query performance and maintainability.",
+          ],
+        },
+        {
+          question: "Tell me about a time your analysis changed a decision.",
+          answer: [
+            "Situation: Team planned roadmap based on incomplete trends.",
+            "Task: Validate assumptions quickly and clearly.",
+            "Action: Built a cleaner model and highlighted risk factors.",
+            "Result: Strategy was adjusted and forecast error reduced.",
+          ],
+        },
+      ],
+      backend: [
+        {
+          question: "How do you handle API versioning safely?",
+          answer: [
+            "Maintain backward compatibility by default.",
+            "Publish deprecation timelines and migration guides.",
+            "Monitor old version usage before removal.",
+          ],
+        },
+        {
+          question: "How do you test backend services effectively?",
+          answer: [
+            "Combine unit, integration, and contract tests.",
+            "Cover high-risk flows with realistic fixtures.",
+            "Add smoke tests in CI/CD before rollout.",
+          ],
+        },
+        {
+          question: "Tell me about a trade-off between speed and quality.",
+          answer: [
+            "Situation: Deadline was fixed and scope changed late.",
+            "Task: Ship safely while meeting launch date.",
+            "Action: Reduced non-critical scope and increased monitoring.",
+            "Result: Release succeeded and follow-up improvements were scheduled.",
+          ],
+        },
+      ],
+      frontend: [
+        {
+          question: "How do you approach frontend testing strategy?",
+          answer: [
+            "Use unit tests for logic-heavy components.",
+            "Use integration tests for user workflows.",
+            "Keep a few reliable end-to-end tests for critical journeys.",
+          ],
+        },
+        {
+          question: "How do you collaborate with design effectively?",
+          answer: [
+            "Align on acceptance criteria before implementation.",
+            "Review edge states and responsiveness early.",
+            "Iterate with small feedback loops.",
+          ],
+        },
+        {
+          question: "Tell me about a time stakeholder feedback changed your plan.",
+          answer: [
+            "Situation: Usability issues were found late in QA.",
+            "Task: Improve flow without delaying launch.",
+            "Action: Prioritized high-impact fixes and validated quickly.",
+            "Result: User satisfaction improved with minimal timeline impact.",
+          ],
+        },
+      ],
+      devops: [
+        {
+          question: "How do you define and use SLOs?",
+          answer: [
+            "Tie SLOs to user-facing reliability outcomes.",
+            "Set realistic error budgets with stakeholders.",
+            "Use SLO status to guide release and prioritization decisions.",
+          ],
+        },
+        {
+          question: "How do you improve deployment safety?",
+          answer: [
+            "Use canary or blue-green rollouts.",
+            "Automate checks and rollback triggers.",
+            "Monitor user-impact metrics during release windows.",
+          ],
+        },
+        {
+          question: "Tell me about a failure that improved your operations process.",
+          answer: [
+            "Situation: Configuration drift caused service instability.",
+            "Task: Restore stability and prevent recurrence.",
+            "Action: Implemented policy checks and stronger review controls.",
+            "Result: Similar incidents dropped significantly.",
+          ],
+        },
+      ],
+      general: [
+        {
+          question: "How do you onboard in your first 90 days?",
+          answer: [
+            "Understand domain, systems, and team goals early.",
+            "Deliver one meaningful win quickly.",
+            "Share progress and assumptions transparently.",
+          ],
+        },
+        {
+          question: "How do you work through ambiguous requirements?",
+          answer: [
+            "Clarify outcomes and constraints with stakeholders.",
+            "Propose options with clear trade-offs.",
+            "Validate assumptions with short iteration cycles.",
+          ],
+        },
+        {
+          question: "Tell me about a failure and what you learned.",
+          answer: [
+            "Situation: Underestimated complexity on a key task.",
+            "Task: Recover plan and rebuild trust.",
+            "Action: Reset estimates and improved risk communication.",
+            "Result: Delivery predictability improved in later projects.",
+          ],
+        },
+      ],
+    };
+
+    let currentRoleKey = "general";
+    let currentRoleTitle = "";
+    let currentSet = [];
+
+    const jobTitleInput = document.getElementById("jobTitle");
+    const generateBtn = document.getElementById("generateBtn");
+    const moreBtn = document.getElementById("moreBtn");
+    const qaList = document.getElementById("qaList");
+    const status = document.getElementById("status");
+
+    function detectRoleKey(title) {
+      const t = title.toLowerCase();
+      if (["data", "engineer", "analyst", "scientist", "etl", "ml", "ai"].some(k => t.includes(k)) && t.includes("data")) return "data";
+      if (["backend", "api", "python", "java", "node", "server"].some(k => t.includes(k))) return "backend";
+      if (["frontend", "react", "angular", "vue", "ui"].some(k => t.includes(k))) return "frontend";
+      if (["devops", "sre", "cloud", "platform"].some(k => t.includes(k))) return "devops";
+      return "general";
+    }
+
+    function createQaCard(item, idx) {
+      const card = document.createElement("article");
+      card.className = "qa";
+
+      const q = document.createElement("p");
+      q.className = "q";
+      q.textContent = `Q${idx + 1}: ${item.question}`;
+
+      const aLabel = document.createElement("p");
+      aLabel.className = "q";
+      aLabel.style.marginBottom = "6px";
+      aLabel.style.color = "#27405f";
+      aLabel.textContent = `A${idx + 1}:`;
+
+      const ul = document.createElement("ul");
+      ul.className = "a";
+      item.answer.forEach(point => {
+        const li = document.createElement("li");
+        li.textContent = point;
+        ul.appendChild(li);
+      });
+
+      const actions = document.createElement("div");
+      actions.className = "qa-actions";
+
+      const deeperBtn = document.createElement("button");
+      deeperBtn.type = "button";
+      deeperBtn.className = "secondary";
+      deeperBtn.textContent = "Deeper Explanation";
+      deeperBtn.addEventListener("click", () => showDeeper(card, item));
+
+      actions.appendChild(deeperBtn);
+      card.appendChild(q);
+      card.appendChild(aLabel);
+      card.appendChild(ul);
+      card.appendChild(actions);
+      return card;
+    }
+
+    function showDeeper(container, item) {
+      const existing = container.querySelector(".followup");
+      if (existing) {
+        existing.remove();
+      }
+
+      const box = document.createElement("div");
+      box.className = "followup";
+      box.innerHTML = [
+        `<strong>Deeper explanation:</strong> ${item.question}`,
+        "Use this in the interview:",
+        "- Open with a short context line.",
+        "- Explain your exact contribution with concrete actions.",
+        "- Finish with one measurable result.",
+      ].join("<br>");
+
+      container.appendChild(box);
+      status.textContent = "Would you like a deeper explanation for any answer or more questions?";
+    }
+
+    function renderQuestions(items) {
+      qaList.innerHTML = "";
+      items.forEach((item, idx) => qaList.appendChild(createQaCard(item, idx)));
+      status.textContent = "Would you like a deeper explanation for any answer or more questions?";
+    }
+
+    function generateSet() {
+      const title = jobTitleInput.value.trim();
+      if (!title) {
+        status.textContent = "Please enter a job title first.";
+        return;
+      }
+
+      currentRoleTitle = title;
+      currentRoleKey = detectRoleKey(title);
+      currentSet = roleTemplates[currentRoleKey] || roleTemplates.general;
+
+      renderQuestions(currentSet);
+    }
+
+    function moreQuestions() {
+      if (!currentRoleTitle) {
+        status.textContent = "Generate the first 5 questions before requesting more.";
+        return;
+      }
+
+      const extras = extraTemplates[currentRoleKey] || extraTemplates.general;
+      const merged = currentSet.concat(extras);
+      renderQuestions(merged);
+    }
+
+    generateBtn.addEventListener("click", generateSet);
+    moreBtn.addEventListener("click", moreQuestions);
+
+    jobTitleInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        generateSet();
+      }
+    });
+  </script>
+</body>
+</html>
